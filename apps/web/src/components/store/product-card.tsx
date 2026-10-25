@@ -1,31 +1,32 @@
 import Image from "next/image";
+import Link from "next/link";
 import Icon from "@/components/ui/icon";
-import { currency, photo, type Product } from "@/lib/catalog";
+import { currency, installmentLabel, photo, type Product } from "@/lib/catalog";
 
 type ProductCardProps = {
   product: Product;
   isFavorite: boolean;
   onToggleFavorite: () => void;
-  onAddToBag: () => void;
 };
 
 export default function ProductCard({
   product,
   isFavorite,
   onToggleFavorite,
-  onAddToBag,
 }: ProductCardProps) {
   return (
     <article className="group">
       <div className="relative aspect-[.73] overflow-hidden bg-[#eae7df] max-tablet:aspect-[.68]">
-        <Image
-          src={photo(product.image)}
-          alt={`${product.name} — imagem ilustrativa`}
-          fill
-          unoptimized
-          sizes="(max-width: 700px) 44vw, (max-width: 900px) 45vw, 23vw"
-          className="object-cover transition-transform duration-600 group-hover:scale-[1.04]"
-        />
+        <Link href={`/produto/${product.id}`} aria-label={`Ver detalhes de ${product.name}`}>
+          <Image
+            src={photo(product.image)}
+            alt={`${product.name} — imagem ilustrativa`}
+            fill
+            unoptimized
+            sizes="(max-width: 700px) 44vw, (max-width: 900px) 45vw, 23vw"
+            className="object-cover transition-transform duration-600 group-hover:scale-[1.04]"
+          />
+        </Link>
         <span className="absolute top-[14px] left-3 bg-[#fffef9ec] px-[9px] py-[7px] text-[7px] tracking-[1px] max-tablet:top-2.5 max-tablet:left-2 max-tablet:p-1.5 max-tablet:text-[6px] max-tablet:tracking-[.5px]">
           {product.tag}
         </span>
@@ -37,17 +38,17 @@ export default function ProductCard({
         >
           <Icon name="heart" size={19} />
         </button>
-        <button
+        <Link
+          href={`/produto/${product.id}`}
           className="absolute right-2.5 bottom-2.5 left-2.5 flex items-center justify-between bg-[#fffef9f2] px-[13px] py-3 text-[10px] hover:bg-white max-tablet:right-[7px] max-tablet:bottom-[7px] max-tablet:left-[7px] max-tablet:px-[7px] max-tablet:py-[11px] max-tablet:text-[8px] max-tablet:[&>svg]:w-[13px]"
-          onClick={onAddToBag}
         >
-          Adicionar à sacola
-          <Icon name="plus" size={16} />
-        </button>
+          Escolher tamanho
+          <Icon name="arrow" size={16} />
+        </Link>
       </div>
       <div className="mt-[17px] flex items-baseline justify-between gap-1.5 desktop:max-wide:flex-col max-tablet:mt-3 max-tablet:flex-col max-tablet:gap-[7px]">
         <h3 className="text-xs font-normal max-tablet:text-[11px]">
-          {product.name}
+          <Link href={`/produto/${product.id}`}>{product.name}</Link>
         </h3>
         <span className="text-[11px] whitespace-nowrap">
           {currency(product.price)}
@@ -55,7 +56,7 @@ export default function ProductCard({
       </div>
       <div className="mt-[9px] flex justify-between gap-1.5 text-[9px] text-muted max-tablet:flex-col max-tablet:gap-[5px]">
         <span>{product.color}</span>
-        <span>3x de {currency(product.price / 3)}</span>
+        <span>{installmentLabel(product.price)}</span>
       </div>
     </article>
   );

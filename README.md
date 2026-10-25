@@ -13,12 +13,23 @@ npm run dev
 
 Abra http://localhost:3000. O aplicativo fica em `apps/web`.
 
-A página inicial inclui apresentação da marca, coleção com filtros por categoria,
-busca por nome, favoritos e sacola demonstrativa com controle de quantidade e subtotal.
-O layout se adapta a celulares e computadores. Produtos e preços são ilustrativos;
-as imagens são carregadas do Unsplash e dependem de acesso à internet. Favoritos e
-sacola ficam na memória da página e são reiniciados ao recarregar. Não há checkout
-ou integração de pagamentos.
+A loja inclui o fluxo completo de demonstração:
+
+- `/`: apresentação da marca, coleção, busca, filtros e favoritos.
+- `/produto/1` a `/produto/4`: detalhes, seleção de tamanho e quantidade.
+- `/sacola`: revisão das peças, remoção e alteração das quantidades.
+- `/checkout`: endereço, entrega, resumo do pedido e pagamento por Pix, cartão ou boleto.
+
+A sacola e os favoritos são salvos no navegador e permanecem ao recarregar.
+Dados de contato e endereço ficam apenas na memória durante o checkout;
+recarregar a página reinicia a etapa de entrega. Use dados fictícios na demonstração.
+Produtos, imagens, descrições, preços, fretes e prazos são ilustrativos. As imagens
+são carregadas do Unsplash e dependem de acesso à internet.
+
+O pagamento é uma interface demonstrativa: utiliza cartão fictício, não emite
+Pix ou boletos, não cria pedidos no servidor e não realiza cobranças. A conclusão
+mostra o resumo da simulação e esvazia a sacola. Uma integração com provedor de
+pagamento e backend será necessária para vendas reais.
 
 A interface usa componentes React com classes utilitárias do Tailwind CSS 4.
 O tema e os estilos globais de acessibilidade ficam em `apps/web/src/app/globals.css`;
@@ -28,6 +39,7 @@ demonstrativo fica em `apps/web/src/lib/catalog.ts`.
 ```sh
 npm run lint
 npm run typecheck
+npm test
 npm run build
 npm start
 ```
