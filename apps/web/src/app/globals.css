@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #fffefa;
-  --color-foreground: #292b25;
-  --color-muted: #77786d;
-  --color-line: #deded4;
-  --color-olive: #575d43;
+  --color-background: #ffffff;
+  --color-foreground: #191919;
+  --color-muted: #737373;
+  --color-line: #e7e7e7;
+  --color-olive: #292929;
   --font-sans: Arial, Helvetica, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
   --breakpoint-tablet: 701px;
@@ -17,7 +17,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 30px;
+    scroll-padding-top: 140px;
   }
 
   body {

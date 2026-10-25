@@ -57,7 +57,7 @@ export default function CheckoutPage() {
           <span aria-hidden="true" className="mx-auto flex size-14 items-center justify-center rounded-full bg-olive text-2xl text-white">✓</span>
           <p className="mt-7 text-[10px] tracking-[2px] text-olive">DEMONSTRAÇÃO CONCLUÍDA</p>
           <h1 ref={titleRef} tabIndex={-1} className="mt-4 text-4xl">Seu estilo, a um passo.</h1>
-          <p role="status" className="mt-5 text-sm leading-7 text-muted">Você percorreu o fluxo completo da Essence Fashion. Esta foi uma simulação: nenhuma compra foi realizada e nenhum pagamento foi processado.</p>
+          <p role="status" className="mt-5 text-sm leading-7 text-muted">Você percorreu o fluxo completo da Essen Fashion. Esta foi uma simulação: nenhuma compra foi realizada e nenhum pagamento foi processado.</p>
           <dl className="my-7 space-y-3 border-y border-line py-5 text-xs"><div className="flex justify-between gap-3"><dt>Peças na simulação</dt><dd>{receipt.count}</dd></div><div className="flex justify-between gap-3"><dt>Forma escolhida</dt><dd>{receipt.method}</dd></div><div className="flex justify-between gap-3"><dt>Total ilustrativo</dt><dd>{currency(receipt.total)}</dd></div></dl>
           <Link href="/#colecao" className="inline-flex bg-foreground px-7 py-4 text-xs text-white hover:bg-olive">Voltar à coleção →</Link>
         </section>

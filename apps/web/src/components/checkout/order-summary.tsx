@@ -17,7 +17,7 @@ export default function OrderSummary({ shipping = null, children }: { shipping?:
         {cart.map((item) => {
           const product = products.find((entry) => entry.id === item.productId);
           if (!product) return null;
-          return <li key={cartKey(item)} className="flex gap-3"><Link href={`/produto/${product.id}`}><Image src={photo(product.image, 180)} alt={product.name} width={50} height={65} unoptimized className="h-[65px] w-[50px] object-cover" /></Link><div className="min-w-0 flex-1 text-[11px]"><Link href={`/produto/${product.id}`}>{product.name}</Link><p className="mt-1 text-muted">{product.color} · {item.size} · Qtd. {item.quantity}</p><p className="mt-2">{currency(product.price * item.quantity)}</p></div></li>;
+          return <li key={cartKey(item)} className="flex gap-3"><Link href={`/produto/${product.id}`}><Image src={photo(product.image, 180)} alt={product.name} width={50} height={65} unoptimized={!product.image.startsWith("/")} className="h-[65px] w-[50px] object-cover" /></Link><div className="min-w-0 flex-1 text-[11px]"><Link href={`/produto/${product.id}`}>{product.name}</Link><p className="mt-1 text-muted">{product.color} · {item.size} · Qtd. {item.quantity}</p><p className="mt-2">{currency(product.price * item.quantity)}</p></div></li>;
         })}
       </ul>
       <dl className="mt-6 space-y-3 border-t border-line pt-5 text-xs">

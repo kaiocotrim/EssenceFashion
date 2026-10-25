@@ -10,7 +10,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
   const product = products.find((item) => String(item.id) === id);
-  return { title: product ? `${product.name} | Essence Fashion` : "Produto não encontrado | Essence Fashion" };
+  return { title: product ? `${product.name} | Essen Fashion` : "Produto não encontrado | Essen Fashion" };
 }
 
 export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {

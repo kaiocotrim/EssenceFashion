@@ -54,7 +54,7 @@ export default function AddressForm({ address, setAddress, deliveryId, setDelive
             />
           </label>
         ))}
-        <label className="block text-xs">Estado<select name="state" required autoComplete="shipping address-level1" value={address.state} onChange={(event) => setAddress((current) => ({ ...current, state: event.target.value }))} className={fieldClass}><option value="">Selecione a UF</option>{states.map((state) => <option key={state} value={state}>{state}</option>)}</select></label>
+        <label className="block text-xs">Estado<select aria-label="Estado" name="state" required autoComplete="shipping address-level1" value={address.state} onChange={(event) => setAddress((current) => ({ ...current, state: event.target.value }))} className={fieldClass}><option value="">Selecione a UF</option>{states.map((state) => <option key={state} value={state}>{state}</option>)}</select></label>
       </div>
       <fieldset className="mt-9 border-t border-line pt-7">
         <legend className="pt-7 font-serif text-2xl">Como prefere receber?</legend>

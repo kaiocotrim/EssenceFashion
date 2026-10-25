@@ -1,4 +1,4 @@
-# Essence Fashion
+# Essen Fashion
 
 Base com Next.js, React, TypeScript, Tailwind CSS e Turborepo, usando npm workspaces.
 
@@ -13,18 +13,26 @@ npm run dev
 
 Abra http://localhost:3000. O aplicativo fica em `apps/web`.
 
+A loja usa o nome **Essen Fashion** e a direção visual da referência indicada:
+[Amissima](https://www.amissima.com.br/home.asp). A página inicial reúne campanhas,
+menu de categorias e ocasiões, vitrine com compra rápida por tamanho, seleção de
+coleções, favoritos, inspiração de looks e formulário demonstrativo de novidades.
+
 A loja inclui o fluxo completo de demonstração:
 
 - `/`: apresentação da marca, coleção, busca, filtros e favoritos.
-- `/produto/1` a `/produto/4`: detalhes, seleção de tamanho e quantidade.
+- `/produto/1` a `/produto/11`: detalhes, seleção de tamanho e quantidade.
 - `/sacola`: revisão das peças, remoção e alteração das quantidades.
 - `/checkout`: endereço, entrega, resumo do pedido e pagamento por Pix, cartão ou boleto.
+- `/ajuda`: informações sobre entrega, pagamento, privacidade e o funcionamento da demonstração.
 
 A sacola e os favoritos são salvos no navegador e permanecem ao recarregar.
 Dados de contato e endereço ficam apenas na memória durante o checkout;
 recarregar a página reinicia a etapa de entrega. Use dados fictícios na demonstração.
-Produtos, imagens, descrições, preços, fretes e prazos são ilustrativos. As imagens
-são carregadas do Unsplash e dependem de acesso à internet.
+Produtos, imagens, descrições, preços, fretes e prazos são ilustrativos. Os banners e as novas fotos de produto ficam em `apps/web/public/images`, com
+as fontes registradas em `SOURCES.md`. Parte do catálogo original ainda utiliza
+fotos do Unsplash e depende de acesso à internet. O formulário de novidades é
+local e não envia nem cadastra e-mails em um serviço externo.
 
 O pagamento é uma interface demonstrativa: utiliza cartão fictício, não emite
 Pix ou boletos, não cria pedidos no servidor e não realiza cobranças. A conclusão

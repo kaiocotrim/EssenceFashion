@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import Icon from "@/components/ui/icon";
 import QuantityControl from "./quantity-control";
 import { useStore } from "./store-provider";
-import { currency, installmentLabel, photo, products, type Product } from "@/lib/catalog";
+import { colorSwatch, currency, installmentLabel, photo, products, type Product } from "@/lib/catalog";
 import ProductCard from "./product-card";
 
 export default function ProductDetail({ product }: { product: Product }) {
@@ -33,16 +33,16 @@ export default function ProductDetail({ product }: { product: Product }) {
       </nav>
       <div className="grid gap-10 tablet:grid-cols-2 tablet:gap-14">
         <div className="relative aspect-[.8] overflow-hidden bg-[#eae7df]">
-          <Image src={photo(product.image, 1100)} alt={`${product.name}, imagem ilustrativa`} fill priority unoptimized sizes="(max-width: 700px) 88vw, 45vw" className="object-cover" />
+          <Image src={photo(product.image, 1100)} alt={`${product.name}, imagem ilustrativa`} fill priority unoptimized={!product.image.startsWith("/")} sizes="(max-width: 700px) 88vw, 45vw" className="object-cover" />
           <span className="absolute top-5 left-5 bg-background px-4 py-2 text-[9px] tracking-widest">{product.tag}</span>
         </div>
         <section className="py-2 tablet:py-6" aria-labelledby="product-name">
-          <p className="text-[10px] tracking-[2px] text-olive">ESSENCE ESSENTIALS / {product.category.toUpperCase()}</p>
+          <p className="text-[10px] tracking-[2px] text-olive">ESSEN FASHION / {product.category.toUpperCase()}</p>
           <h1 id="product-name" className="mt-4 text-4xl leading-tight tracking-tight desktop:text-5xl">{product.name}</h1>
           <p className="mt-5 text-xl">{currency(product.price)}</p>
           <p className="mt-2 text-xs text-muted">{installmentLabel(product.price)} · Valores ilustrativos</p>
           <p className="mt-7 max-w-lg text-sm leading-7 text-muted">{product.description}</p>
-          <div className="mt-7 border-t border-line pt-6"><p className="text-xs">Cor: <span className="text-muted">{product.color}</span></p><span className="mt-3 block size-7 rounded-full border-4 border-white bg-[#bdab90] outline outline-line" aria-hidden="true" /></div>
+          <div className="mt-7 border-t border-line pt-6"><p className="text-xs">Cor: <span className="text-muted">{product.color}</span></p><span className="mt-3 block size-7 rounded-full border-4 border-white outline outline-line" style={{ backgroundColor: colorSwatch(product.color) }} aria-hidden="true" /></div>
           <fieldset className="mt-6" aria-describedby={error ? "size-error" : undefined}>
             <legend className="mb-3 text-xs">Selecione o tamanho</legend>
             <div className="flex flex-wrap gap-2">

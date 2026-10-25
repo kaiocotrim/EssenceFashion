@@ -1,12 +1,13 @@
 "use client";
 
 import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
-import { products } from "@/lib/catalog";
+import { products, type Collection } from "@/lib/catalog";
 import { addCartItem, cartSubtotal, setCartQuantity } from "@/lib/cart";
 import { getServerShoppingSnapshot, getShoppingSnapshot, subscribeShopping, updateShopping } from "@/lib/shopping-storage";
 
 function useStoreState() {
   const shopping = useSyncExternalStore(subscribeShopping, getShoppingSnapshot, getServerShoppingSnapshot);
+  const [collection, setCollection] = useState<Collection>("featured");
   const [category, setCategory] = useState("Todos");
   const [query, setQuery] = useState("");
   const [favoritesOnly, setFavoritesOnly] = useState(false);
@@ -14,8 +15,13 @@ function useStoreState() {
 
   function selectCategory(value: string) {
     setCategory(value);
+    setCollection("all");
     setQuery("");
     setFavoritesOnly(false);
+  }
+  function selectCollection(value: Collection) {
+    selectCategory("Todos");
+    setCollection(value);
   }
   function addToBag(productId: number, size: string, quantity = 1) {
     const product = products.find((item) => item.id === productId);
@@ -35,8 +41,8 @@ function useStoreState() {
   }
 
   return {
-    ...shopping, category, query, favoritesOnly, notice,
-    setQuery, setFavoritesOnly, selectCategory, addToBag, toggleFavorite, updateQuantity, clearBag,
+    ...shopping, category, query, favoritesOnly, notice, collection,
+    setQuery, setFavoritesOnly, selectCategory, selectCollection, addToBag, toggleFavorite, updateQuantity, clearBag,
     count: shopping.cart.reduce((sum, item) => sum + item.quantity, 0),
     subtotal: cartSubtotal(shopping.cart, products),
   };

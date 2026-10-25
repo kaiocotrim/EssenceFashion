@@ -5,8 +5,8 @@ import StoreFooter from "@/components/store/store-footer";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Essence Fashion | Seu estilo. Sua essência.",
-  description: "Descubra a Essence Fashion: inspirações, novidades e peças essenciais para expressar seu estilo em cada momento do dia.",
+  title: "Essen Fashion | Novas possibilidades de vestir.",
+  description: "Descubra a Essen Fashion: inspirações, novidades e peças essenciais para expressar seu estilo em cada momento do dia.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

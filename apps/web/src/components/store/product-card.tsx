@@ -1,7 +1,11 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
-import { currency, installmentLabel, photo, type Product } from "@/lib/catalog";
+import { colorSwatch, currency, installmentLabel, photo, type Product } from "@/lib/catalog";
+import { useStore } from "./store-provider";
 
 type ProductCardProps = {
   product: Product;
@@ -9,55 +13,36 @@ type ProductCardProps = {
   onToggleFavorite: () => void;
 };
 
-export default function ProductCard({
-  product,
-  isFavorite,
-  onToggleFavorite,
-}: ProductCardProps) {
+export default function ProductCard({ product, isFavorite, onToggleFavorite }: ProductCardProps) {
+  const [sizesOpen, setSizesOpen] = useState(false);
+  const [added, setAdded] = useState(false);
+  const { addToBag } = useStore();
+
+  function add(size: string) {
+    addToBag(product.id, size);
+    setSizesOpen(false);
+    setAdded(true);
+  }
+
   return (
-    <article className="group">
-      <div className="relative aspect-[.73] overflow-hidden bg-[#eae7df] max-tablet:aspect-[.68]">
+    <article className="group relative min-w-0">
+      <div className="relative aspect-[.79] overflow-hidden bg-[#f1f0ee]">
         <Link href={`/produto/${product.id}`} aria-label={`Ver detalhes de ${product.name}`}>
-          <Image
-            src={photo(product.image)}
-            alt={`${product.name} — imagem ilustrativa`}
-            fill
-            unoptimized
-            sizes="(max-width: 700px) 44vw, (max-width: 900px) 45vw, 23vw"
-            className="object-cover transition-transform duration-600 group-hover:scale-[1.04]"
-          />
+          <Image src={photo(product.image)} alt={`${product.name} — imagem ilustrativa`} fill unoptimized={!product.image.startsWith("/")} sizes="(max-width: 700px) 47vw, (max-width: 1100px) 31vw, 24vw" className="object-cover transition-transform duration-700 group-hover:scale-[1.025]" />
         </Link>
-        <span className="absolute top-[14px] left-3 bg-[#fffef9ec] px-[9px] py-[7px] text-[7px] tracking-[1px] max-tablet:top-2.5 max-tablet:left-2 max-tablet:p-1.5 max-tablet:text-[6px] max-tablet:tracking-[.5px]">
-          {product.tag}
-        </span>
-        <button
-          className={`absolute top-[9px] right-2 inline-flex min-h-10 min-w-9 items-center justify-center rounded-full bg-[#fffef9e8] p-1 max-tablet:top-[7px] max-tablet:right-[5px] max-tablet:min-h-8 max-tablet:min-w-[30px] max-tablet:[&>svg]:w-4 ${isFavorite ? "[&_svg]:fill-[#697154] [&_svg]:text-[#697154]" : ""}`}
-          aria-label={`${isFavorite ? "Remover" : "Adicionar"} ${product.name} ${isFavorite ? "dos" : "aos"} favoritos`}
-          aria-pressed={isFavorite}
-          onClick={onToggleFavorite}
-        >
-          <Icon name="heart" size={19} />
-        </button>
-        <Link
-          href={`/produto/${product.id}`}
-          className="absolute right-2.5 bottom-2.5 left-2.5 flex items-center justify-between bg-[#fffef9f2] px-[13px] py-3 text-[10px] hover:bg-white max-tablet:right-[7px] max-tablet:bottom-[7px] max-tablet:left-[7px] max-tablet:px-[7px] max-tablet:py-[11px] max-tablet:text-[8px] max-tablet:[&>svg]:w-[13px]"
-        >
-          Escolher tamanho
-          <Icon name="arrow" size={16} />
-        </Link>
+        {product.compareAt && <span className="absolute top-3 left-3 bg-white px-2 py-1 text-[9px] tracking-wide text-[#a54c43]">{Math.round((1 - product.price / product.compareAt) * 100)}% OFF</span>}
+        <button className={`absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-white/60 transition-colors hover:bg-white ${isFavorite ? "[&>svg]:fill-black" : ""}`} aria-label={`${isFavorite ? "Remover" : "Adicionar"} ${product.name} ${isFavorite ? "dos" : "aos"} favoritos`} aria-pressed={isFavorite} onClick={onToggleFavorite}><Icon name="heart" size={19} /></button>
+        <div className={`absolute inset-x-0 bottom-0 bg-white/95 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 max-tablet:opacity-100 ${sizesOpen || added ? "opacity-100" : "opacity-0"}`}>
+          {sizesOpen ? <div className="px-3 py-4"><div className="mb-3 flex items-center justify-between gap-2"><span className="text-[9px] tracking-wider">ESCOLHA O TAMANHO</span><button onClick={() => setSizesOpen(false)} aria-label="Fechar seleção de tamanho" className="p-1"><Icon name="close" size={14} /></button></div><div className="flex flex-wrap justify-center gap-1.5">{product.sizes.map((size) => <button key={size} onClick={() => add(size)} className="min-h-9 min-w-8 border border-line px-2 text-[10px] transition-colors hover:border-black hover:bg-black hover:text-white">{size}</button>)}</div></div> : <button onClick={() => product.sizes.length === 1 ? add(product.sizes[0]) : setSizesOpen(true)} className="flex min-h-12 w-full items-center justify-center gap-3 px-3 py-3 text-[9px] tracking-[1px] max-tablet:min-h-10 max-tablet:text-[8px]">{added ? "ADICIONADO À SACOLA ✓" : "INCLUIR NA SACOLA"}{!added && <Icon name="plus" size={15} />}</button>}
+        </div>
       </div>
-      <div className="mt-[17px] flex items-baseline justify-between gap-1.5 desktop:max-wide:flex-col max-tablet:mt-3 max-tablet:flex-col max-tablet:gap-[7px]">
-        <h3 className="text-xs font-normal max-tablet:text-[11px]">
-          <Link href={`/produto/${product.id}`}>{product.name}</Link>
-        </h3>
-        <span className="text-[11px] whitespace-nowrap">
-          {currency(product.price)}
-        </span>
+      <div className="pt-4 pb-2 text-[11px] leading-6 max-tablet:text-[10px]">
+        <h3 className="truncate font-sans text-[11px] font-normal tracking-[.7px] uppercase max-tablet:text-[10px]"><Link href={`/produto/${product.id}`}>{product.name}</Link></h3>
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-2">{product.compareAt && <span className="text-[10px] text-muted line-through">{currency(product.compareAt)}</span>}<span>{currency(product.price)}</span></div>
+        <p className="text-[10px] text-muted max-tablet:text-[9px]">ou {installmentLabel(product.price)}</p>
+        <div className="mt-2 flex items-center gap-2"><span className="size-3 border border-black/15" style={{ backgroundColor: colorSwatch(product.color) }} aria-hidden="true" /><span className="text-[9px] text-muted">{product.color}</span></div>
       </div>
-      <div className="mt-[9px] flex justify-between gap-1.5 text-[9px] text-muted max-tablet:flex-col max-tablet:gap-[5px]">
-        <span>{product.color}</span>
-        <span>{installmentLabel(product.price)}</span>
-      </div>
+      <span role="status" className="sr-only">{added ? `${product.name} adicionado à sacola` : ""}</span>
     </article>
   );
 }
