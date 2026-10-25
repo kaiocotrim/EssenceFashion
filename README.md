@@ -25,3 +25,4 @@ npm start
 Importe o repositório na sua conta Vercel e selecione `apps/web` como Root Directory e Next.js como framework. Mantenha habilitado o acesso aos arquivos fora da Root Directory para o workspace e o lockfile da raiz.
 
 A Vercel é o serviço de hospedagem e não precisa ser instalada como dependência do aplicativo. A publicação depende de conectar uma conta Vercel.
+resende
