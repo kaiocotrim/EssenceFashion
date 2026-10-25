@@ -20,6 +20,11 @@ as imagens são carregadas do Unsplash e dependem de acesso à internet. Favorit
 sacola ficam na memória da página e são reiniciados ao recarregar. Não há checkout
 ou integração de pagamentos.
 
+A interface usa componentes React com classes utilitárias do Tailwind CSS 4.
+O tema e os estilos globais de acessibilidade ficam em `apps/web/src/app/globals.css`;
+os cards e ícones reutilizáveis ficam em `apps/web/src/components`, e o catálogo
+demonstrativo fica em `apps/web/src/lib/catalog.ts`.
+
 ```sh
 npm run lint
 npm run typecheck
