@@ -2,6 +2,8 @@
 
 Imagens públicas da referência indicada pelo usuário, usadas nesta vitrine demonstrativa.
 
+- banner1.png: imagem fornecida pelo usuário para o banner principal da loja, com modelo de vestido azul em duas poses. Arquivo original preservado.
+
 - campaign/model-rio.webp: recuperada da publicação existente em https://essence-fashion-mu.vercel.app/images/campaign/model-rio.webp para restaurar a versão escolhida pelo usuário. A fonte original da imagem não consta neste checkout.
 - ../fonts/allura-regular.ttf: recuperada de https://essence-fashion-mu.vercel.app/fonts/allura-regular.ttf, usada no título da campanha Rio.
 
