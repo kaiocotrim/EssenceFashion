@@ -3,26 +3,46 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "prisma generate && next dev",
+    "build": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "next typegen && tsc --noEmit",
-    "test": "node tests/checkout.test.mjs"
+    "typecheck": "prisma generate && next typegen && tsc --noEmit",
+    "test": "prisma generate && node --conditions=react-server --import tsx --test tests/checkout.test.mjs tests/management.test.mjs tests/supabase.test.mjs tests/prisma.test.mjs",
+    "test:admin": "node --test tests/admin-api.test.mjs",
+    "db:generate": "prisma generate",
+    "db:validate": "prisma validate",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio",
+    "db:check": "node --conditions=react-server --import tsx scripts/database-check.ts",
+    "db:seed": "node --conditions=react-server --import tsx scripts/database-import.ts --seed",
+    "db:import": "node --conditions=react-server --import tsx scripts/database-import.ts --from-local",
+    "supabase:seed": "npm run db:seed",
+    "supabase:import": "npm run db:import"
   },
   "dependencies": {
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "dotenv": "^18.0.9",
     "next": "16.4.3",
+    "pg": "^8.23.1",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.5.12",
+    "@electric-sql/pglite-socket": "^0.2.15",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
+    "@types/pg": "^8.23.1",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "prisma": "^7.10.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

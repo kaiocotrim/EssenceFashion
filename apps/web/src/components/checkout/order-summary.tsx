@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useStore } from "@/components/store/store-provider";
 import { cartKey, orderTotal } from "@/lib/cart";
-import { currency, photo, products } from "@/lib/catalog";
+import { currency, photo } from "@/lib/catalog";
 import type { ReactNode } from "react";
 
 export default function OrderSummary({ shipping = null, children }: { shipping?: number | null; children?: ReactNode }) {
-  const { cart, count, subtotal } = useStore();
+  const { products, cart, count, subtotal } = useStore();
   const total = orderTotal(subtotal, shipping ?? 0);
   return (
     <aside aria-label="Resumo do pedido" className="self-start border border-line bg-[#f5f4ee] p-6 tablet:sticky tablet:top-8 tablet:p-8">

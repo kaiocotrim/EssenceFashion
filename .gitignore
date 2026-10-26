@@ -9,3 +9,5 @@ dist/
 *.tsbuildinfo
 *-debug.log*
 .DS_Store
+.data/
+apps/web/src/generated/prisma/

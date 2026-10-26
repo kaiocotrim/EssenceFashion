@@ -6,6 +6,7 @@
   --color-muted: #737373;
   --color-line: #e7e7e7;
   --color-olive: #292929;
+  --font-campaign: "Essen Campaign", cursive;
   --font-sans: Arial, Helvetica, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
   --breakpoint-tablet: 701px;
@@ -59,4 +60,566 @@
       animation: none !important;
     }
   }
+}
+
+@font-face {
+  font-family:Essen Campaign;
+  src:url(/fonts/allura-regular.ttf)format("truetype");
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+}
+
+.account-page {
+  background:#f7f5f1;
+  padding:0 4.5%;
+}
+
+.account-topline {
+  justify-content:space-between;
+  align-items:center;
+  max-width:1440px;
+  min-height:68px;
+  margin:auto;
+  display:flex;
+}
+
+.account-topline nav {
+  color:#77716a;
+  gap:13px;
+  font-size:11px;
+  display:flex;
+}
+
+.account-topline nav a:hover {
+  color:#211e1a;
+}
+
+.account-topline nav [aria-current] {
+  color:#302c27;
+}
+
+.account-topline-note,.account-bottomline>span:first-child {
+  letter-spacing:2px;
+  color:#77716a;
+  font-size:9px;
+}
+
+.account-layout {
+  background:#fffefd;
+  border:1px solid #e8e3dc;
+  grid-template-columns:1fr 1fr;
+  max-width:1440px;
+  margin:auto;
+  display:grid;
+}
+
+.account-editorial {
+  color:#fff;
+  background:#8a8f83;
+  min-height:760px;
+  position:relative;
+  overflow:hidden;
+}
+
+.account-campaign-image {
+  object-fit:cover;
+  object-position:69% center;
+  transition:transform 1.2s;
+}
+
+.account-editorial:hover .account-campaign-image {
+  transform:scale(1.025);
+}
+
+.account-image-shade {
+  background:linear-gradient(#0000002e,#0000 35%,#1418132b 50%,#141813c2);
+  position:absolute;
+  inset:0;
+}
+
+.account-editorial-top {
+  letter-spacing:1.8px;
+  justify-content:space-between;
+  gap:14px;
+  font-size:8px;
+  display:flex;
+  position:absolute;
+  inset:29px 30px auto;
+}
+
+.account-editorial-top span:first-child {
+  border-bottom:1px solid #ffffff80;
+  padding-bottom:7px;
+}
+
+.account-editorial-copy {
+  position:absolute;
+  bottom:94px;
+  left:9%;
+  right:7%;
+}
+
+.account-eyebrow {
+  letter-spacing:2.1px;
+  font-size:9px;
+  line-height:1.8;
+  display:block;
+}
+
+.account-editorial-copy .account-eyebrow {
+  color:#ffffffe0;
+}
+
+.account-editorial-copy h2 {
+  letter-spacing:-2px;
+  margin-top:22px;
+  font-size:clamp(43px,4.4vw,68px);
+  line-height:1.07;
+}
+
+.account-editorial-copy h2 em {
+  font-weight:400;
+}
+
+.account-editorial-copy p {
+  color:#ffffffe0;
+  margin-top:24px;
+  font-size:12px;
+  line-height:1.9;
+}
+
+.account-editorial-copy a {
+  letter-spacing:1.5px;
+  border-bottom:1px solid #ffffff80;
+  align-items:center;
+  gap:30px;
+  margin-top:29px;
+  padding-bottom:10px;
+  font-size:9px;
+  display:inline-flex;
+}
+
+.account-editorial-copy a:hover {
+  border-color:#fff;
+}
+
+.account-image-caption {
+  letter-spacing:1.6px;
+  border-top:1px solid #ffffff40;
+  justify-content:space-between;
+  gap:10px;
+  padding-top:17px;
+  font-size:8px;
+  display:flex;
+  position:absolute;
+  inset:auto 30px 25px;
+}
+
+.account-form-section {
+  justify-content:center;
+  align-items:center;
+  padding:47px 11%;
+  display:flex;
+}
+
+.account-form-content {
+  width:100%;
+  max-width:400px;
+}
+
+.account-welcome-mark {
+  color:#8c7964;
+  margin-bottom:19px;
+  font:italic 32px Georgia,serif;
+}
+
+.account-form-content>.account-eyebrow {
+  color:#84735f;
+  letter-spacing:2px;
+  font-size:8px;
+}
+
+.account-form-content h1 {
+  letter-spacing:-1.6px;
+  color:#29251f;
+  margin-top:15px;
+  font-size:clamp(34px,3.1vw,47px);
+  line-height:1.13;
+}
+
+.account-form-content h1 span {
+  display:block;
+}
+
+.account-description {
+  color:#77716a;
+  max-width:310px;
+  margin-top:17px;
+  font-size:12px;
+  line-height:1.85;
+}
+
+.account-tabs {
+  border-bottom:1px solid #e7e2da;
+  margin:28px 0;
+  display:flex;
+}
+
+.account-tabs button {
+  color:#80786e;
+  border-bottom:2px solid #0000;
+  flex:1;
+  margin-bottom:-1px;
+  padding:14px 8px;
+  font-size:12px;
+  transition:color .2s,border-color .2s;
+}
+
+.account-tabs button[aria-selected=true] {
+  color:#29251f;
+  border-color:#29251f;
+}
+
+.account-tabs button:hover {
+  color:#29251f;
+}
+
+.account-form {
+  gap:21px;
+  display:grid;
+}
+
+.account-form-content [role=region] {
+  margin-top:28px;
+}
+
+.account-field label {
+  color:#37312a;
+  margin-bottom:9px;
+  font-size:11px;
+  font-weight:500;
+}
+
+.account-field input {
+  background:#fffefd;
+  border-color:#ded8cf;
+  border-radius:3px;
+  height:51px;
+  padding-left:15px;
+  font-size:14px;
+}
+
+.account-field input::placeholder {
+  color:#9a948c;
+  font-size:12px;
+}
+
+.account-field input:hover {
+  border-color:#b7ab9c;
+}
+
+.account-field input[aria-invalid=true] {
+  border-color:#a43b32;
+}
+
+.account-field input:focus {
+  --tw-ring-color:#8c7964;
+  border-color:#8c7964;
+}
+
+.account-form-options {
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  margin-top:-5px;
+  font-size:10px;
+  display:flex;
+}
+
+.account-form-options>span {
+  color:#847d74;
+}
+
+.account-form-options button {
+  color:#5e5142;
+  text-underline-offset:3px;
+  text-decoration:underline;
+}
+
+.account-submit {
+  color:#fff;
+  letter-spacing:.3px;
+  background:#292b24;
+  border-radius:3px;
+  justify-content:space-between;
+  align-items:center;
+  min-height:52px;
+  padding:0 21px;
+  font-size:12px;
+  transition:background .2s;
+  display:flex;
+}
+
+.account-submit:hover {
+  background:#454b3b;
+}
+
+.account-submit svg {
+  transition:transform .2s;
+}
+
+.account-submit:hover svg {
+  transform:translate(4px);
+}
+
+.account-back {
+  text-underline-offset:4px;
+  font-size:12px;
+  text-decoration:underline;
+}
+
+.account-privacy {
+  text-align:center;
+  color:#847d74;
+  margin-top:20px;
+  font-size:10px;
+  line-height:1.9;
+}
+
+.account-privacy a {
+  color:#5e5142;
+  text-underline-offset:3px;
+  text-decoration:underline;
+}
+
+.account-divider {
+  color:#8d8377;
+  letter-spacing:1.6px;
+  align-items:center;
+  gap:15px;
+  margin:28px 0 19px;
+  font-size:8px;
+  display:flex;
+}
+
+.account-divider:before,.account-divider:after {
+  content:"";
+  background:#eae5de;
+  flex:1;
+  height:1px;
+}
+
+.account-explore {
+  text-align:center;
+  color:#847d74;
+  font-size:11px;
+  line-height:2;
+  display:block;
+}
+
+.account-explore span {
+  color:#423c33;
+  justify-content:center;
+  align-items:center;
+  gap:9px;
+  display:flex;
+}
+
+.account-explore:hover span {
+  text-underline-offset:4px;
+  text-decoration:underline;
+}
+
+.account-demo {
+  color:#847d74;
+  text-align:center;
+  margin-top:24px;
+  font-size:9px;
+  line-height:1.8;
+}
+
+.account-notice {
+  color:#354330;
+  background:#eff2ed;
+  border:1px solid #c9d1c6;
+  border-radius:3px;
+  margin-top:20px;
+  padding:14px;
+  font-size:12px;
+  line-height:1.8;
+}
+
+.account-bottomline {
+  color:#77716a;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  max-width:1440px;
+  min-height:83px;
+  margin:auto;
+  font-size:10px;
+  display:flex;
+}
+
+.account-bottomline a {
+  color:#51483c;
+  align-items:center;
+  gap:10px;
+  display:inline-flex;
+}
+
+@media (min-width:1600px) {
+  .account-editorial {
+    min-height:820px;
+  }
+
+}
+
+@media (max-width:1100px) {
+  .account-form-section {
+    padding:38px 8%;
+  }
+
+  .account-editorial-top {
+    letter-spacing:1px;
+    font-size:7px;
+  }
+
+  .account-form-options>span {
+    display:none;
+  }
+
+  .account-form-options {
+    justify-content:flex-end;
+  }
+
+  .account-bottomline>span:first-child {
+    display:none;
+  }
+
+}
+
+@media (max-width:900px) {
+  .account-page {
+    padding:0 24px;
+  }
+
+  .account-topline {
+    min-height:54px;
+  }
+
+  .account-layout {
+    grid-template-columns:1fr;
+  }
+
+  .account-form-section {
+    grid-row:1;
+    padding:36px 26px;
+  }
+
+  .account-form-content {
+    max-width:420px;
+  }
+
+  .account-form-content h1 {
+    font-size:42px;
+  }
+
+  .account-welcome-mark {
+    margin-bottom:15px;
+  }
+
+  .account-editorial {
+    min-height:380px;
+  }
+
+  .account-campaign-image {
+    object-position:center 43%;
+  }
+
+  .account-editorial-copy {
+    bottom:70px;
+    left:7%;
+  }
+
+  .account-editorial-copy h2 {
+    margin-top:12px;
+    font-size:43px;
+  }
+
+  .account-editorial-copy p {
+    margin-top:15px;
+  }
+
+  .account-editorial-copy a {
+    margin-top:18px;
+  }
+
+  .account-editorial-top {
+    inset:22px 7% auto;
+  }
+
+  .account-image-caption {
+    bottom:20px;
+    left:7%;
+    right:7%;
+  }
+
+  .account-bottomline {
+    text-align:center;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:10px;
+    min-height:86px;
+    padding:20px 0;
+  }
+
+}
+
+@media (max-width:480px) {
+  .account-page {
+    padding:0 15px;
+  }
+
+  .account-topline-note {
+    letter-spacing:1.1px;
+    font-size:7px;
+  }
+
+  .account-topline nav {
+    gap:8px;
+    font-size:10px;
+  }
+
+  .account-form-section {
+    padding:30px 22px;
+  }
+
+  .account-form-content h1 {
+    font-size:38px;
+  }
+
+  .account-description {
+    font-size:12px;
+  }
+
+  .account-editorial-top span:last-child {
+    display:none;
+  }
+
+  .account-editorial-copy .account-eyebrow {
+    letter-spacing:1.5px;
+    font-size:7px;
+  }
+
+  .account-image-caption {
+    font-size:7px;
+  }
+
+  .account-bottomline {
+    flex-direction:column;
+  }
+
 }

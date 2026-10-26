@@ -3,7 +3,9 @@
 import type { Dispatch, SetStateAction } from "react";
 import Icon from "@/components/ui/icon";
 import { currency } from "@/lib/catalog";
-import { deliveryOptions, states, type Address } from "@/lib/checkout";
+import { states, type Address } from "@/lib/checkout";
+import { useStore } from "@/components/store/store-provider";
+import { managedDeliveryOptions } from "@/lib/management";
 
 const fieldClass = "mt-2 min-h-12 w-full border border-line bg-background px-3 py-3 text-sm placeholder:text-muted/60";
 const fields: { key: keyof Address; label: string; autoComplete: string; type?: string; maxLength: number; wide?: boolean; optional?: boolean }[] = [
@@ -28,6 +30,8 @@ type Props = {
 };
 
 export default function AddressForm({ address, setAddress, deliveryId, setDeliveryId, error, onContinue }: Props) {
+  const { shipping } = useStore();
+  const deliveryOptions = managedDeliveryOptions(shipping);
   return (
     <form onSubmit={(event) => { event.preventDefault(); onContinue(); }}>
       <h2 className="text-2xl">Para onde vamos?</h2>

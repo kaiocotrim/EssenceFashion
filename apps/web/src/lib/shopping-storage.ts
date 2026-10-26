@@ -1,5 +1,4 @@
-import { products } from "./catalog";
-import { normalizeCart, type CartItem } from "./cart";
+import { addCartItem, type CartItem } from "./cart";
 
 type ShoppingState = { cart: CartItem[]; favorites: number[]; ready: boolean };
 const storageKey = "essence-fashion:shopping:v1";
@@ -11,9 +10,9 @@ function load(): ShoppingState {
   try {
     const value = JSON.parse(localStorage.getItem(storageKey) || "{}");
     return {
-      cart: normalizeCart(value?.cart, products),
+      cart: Array.isArray(value?.cart) ? value.cart.reduce((cart: CartItem[], item: CartItem) => item && Number.isSafeInteger(item.productId) && typeof item.size === "string" && Number.isSafeInteger(item.quantity) && item.quantity > 0 ? addCartItem(cart, item) : cart, []) : [],
       favorites: Array.isArray(value?.favorites)
-        ? [...new Set<number>(value.favorites.filter((id: unknown) => products.some((product) => product.id === id)))]
+        ? [...new Set<number>(value.favorites.filter((id: unknown) => typeof id === "number" && Number.isSafeInteger(id)))]
         : [],
       ready: true,
     };

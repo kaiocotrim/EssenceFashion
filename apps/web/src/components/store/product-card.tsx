@@ -19,11 +19,12 @@ export default function ProductCard({ product, isFavorite, onToggleFavorite }: P
   const { addToBag } = useStore();
 
   function add(size: string) {
-    addToBag(product.id, size);
+    if (!addToBag(product.id, size)) return;
     setSizesOpen(false);
     setAdded(true);
   }
 
+  const soldOut = Object.values(product.stock ?? {}).every((quantity) => quantity === 0);
   return (
     <article className="group relative min-w-0">
       <div className="relative aspect-[.79] overflow-hidden bg-[#f1f0ee]">
@@ -33,7 +34,7 @@ export default function ProductCard({ product, isFavorite, onToggleFavorite }: P
         {product.compareAt && <span className="absolute top-3 left-3 bg-white px-2 py-1 text-[9px] tracking-wide text-[#a54c43]">{Math.round((1 - product.price / product.compareAt) * 100)}% OFF</span>}
         <button className={`absolute top-2 right-2 flex size-10 items-center justify-center rounded-full bg-white/60 transition-colors hover:bg-white ${isFavorite ? "[&>svg]:fill-black" : ""}`} aria-label={`${isFavorite ? "Remover" : "Adicionar"} ${product.name} ${isFavorite ? "dos" : "aos"} favoritos`} aria-pressed={isFavorite} onClick={onToggleFavorite}><Icon name="heart" size={19} /></button>
         <div className={`absolute inset-x-0 bottom-0 bg-white/95 transition-opacity group-hover:opacity-100 group-focus-within:opacity-100 max-tablet:opacity-100 ${sizesOpen || added ? "opacity-100" : "opacity-0"}`}>
-          {sizesOpen ? <div className="px-3 py-4"><div className="mb-3 flex items-center justify-between gap-2"><span className="text-[9px] tracking-wider">ESCOLHA O TAMANHO</span><button onClick={() => setSizesOpen(false)} aria-label="Fechar seleção de tamanho" className="p-1"><Icon name="close" size={14} /></button></div><div className="flex flex-wrap justify-center gap-1.5">{product.sizes.map((size) => <button key={size} onClick={() => add(size)} className="min-h-9 min-w-8 border border-line px-2 text-[10px] transition-colors hover:border-black hover:bg-black hover:text-white">{size}</button>)}</div></div> : <button onClick={() => product.sizes.length === 1 ? add(product.sizes[0]) : setSizesOpen(true)} className="flex min-h-12 w-full items-center justify-center gap-3 px-3 py-3 text-[9px] tracking-[1px] max-tablet:min-h-10 max-tablet:text-[8px]">{added ? "ADICIONADO À SACOLA ✓" : "INCLUIR NA SACOLA"}{!added && <Icon name="plus" size={15} />}</button>}
+          {sizesOpen ? <div className="px-3 py-4"><div className="mb-3 flex items-center justify-between gap-2"><span className="text-[9px] tracking-wider">ESCOLHA O TAMANHO</span><button onClick={() => setSizesOpen(false)} aria-label="Fechar seleção de tamanho" className="p-1"><Icon name="close" size={14} /></button></div><div className="flex flex-wrap justify-center gap-1.5">{product.sizes.map((size) => <button key={size} disabled={!(product.stock?.[size] ?? 0)} onClick={() => add(size)} className="min-h-9 min-w-8 border border-line px-2 text-[10px] transition-colors hover:border-black hover:bg-black hover:text-white">{size}</button>)}</div></div> : <button disabled={soldOut} onClick={() => product.sizes.length === 1 ? add(product.sizes[0]) : setSizesOpen(true)} className="flex min-h-12 w-full items-center justify-center gap-3 px-3 py-3 text-[9px] tracking-[1px] max-tablet:min-h-10 max-tablet:text-[8px]">{soldOut ? "ESGOTADO" : added ? "ADICIONADO À SACOLA ✓" : "INCLUIR NA SACOLA"}{!added && <Icon name="plus" size={15} />}</button>}
         </div>
       </div>
       <div className="pt-4 pb-2 text-[11px] leading-6 max-tablet:text-[10px]">

@@ -8,12 +8,13 @@ import OrderSummary from "@/components/checkout/order-summary";
 import CheckoutProgress from "@/components/checkout/checkout-progress";
 import Icon from "@/components/ui/icon";
 import { cartKey } from "@/lib/cart";
-import { currency, photo, products } from "@/lib/catalog";
+import { currency, photo } from "@/lib/catalog";
 
 export default function BagPage() {
-  const { cart, count, ready, updateQuantity } = useStore();
+  const { products, catalogError, cart, count, ready, updateQuantity } = useStore();
   return (
     <main id="conteudo" className="mx-auto w-full max-w-[1400px] px-[6%] py-8 tablet:py-12">
+      {catalogError && <p role="alert" className="mb-5 bg-red-50 p-4 text-red-800">{catalogError}</p>}
       <CheckoutProgress current={1} />
       <p className="text-[10px] tracking-[2px] text-olive">SEUS PRÓXIMOS ESSENCIAIS</p>
       <div className="mt-3 mb-9 flex flex-wrap items-end justify-between gap-5"><h1 className="text-4xl tracking-tight tablet:text-5xl">Minha sacola <span className="text-2xl text-muted">({count})</span></h1><Link href="/#colecao" className="border-b border-line pb-1 text-xs">Continuar explorando ↗</Link></div>

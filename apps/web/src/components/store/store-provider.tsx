@@ -1,12 +1,36 @@
 "use client";
 
-import { createContext, useContext, useState, useSyncExternalStore, type ReactNode } from "react";
-import { products, type Collection } from "@/lib/catalog";
-import { addCartItem, cartSubtotal, setCartQuantity } from "@/lib/cart";
+import { createContext, useContext, useEffect, useState, useSyncExternalStore, type ReactNode } from "react";
+import { type Collection } from "@/lib/catalog";
+import { initialManagement, defaultShipping } from "@/lib/management";
+import { addCartItem, cartKey, cartSubtotal, normalizeCart, setCartQuantity } from "@/lib/cart";
 import { getServerShoppingSnapshot, getShoppingSnapshot, subscribeShopping, updateShopping } from "@/lib/shopping-storage";
 
 function useStoreState() {
   const shopping = useSyncExternalStore(subscribeShopping, getShoppingSnapshot, getServerShoppingSnapshot);
+  const [catalog, setCatalog] = useState(initialManagement().products);
+  const [shipping, setShipping] = useState(defaultShipping);
+  const [catalogReady, setCatalogReady] = useState(false);
+  const [catalogError, setCatalogError] = useState("");
+  useEffect(() => {
+    let alive = true;
+    async function refresh() {
+      try {
+        const response = await fetch("/api/catalog", { cache: "no-store" });
+        if (!response.ok) throw new Error();
+        const data = await response.json();
+        if (alive) { setCatalog(data.products); setShipping(data.shipping); setCatalogReady(true); setCatalogError(""); }
+      } catch { if (alive) setCatalogError("Não foi possível atualizar o catálogo. Recarregue a página antes de comprar."); }
+    }
+    void refresh();
+    const onFocus = () => { void refresh(); };
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("essen-catalog-update", onFocus);
+    window.addEventListener("storage", onFocus);
+    return () => { alive = false; window.removeEventListener("focus", onFocus); window.removeEventListener("essen-catalog-update", onFocus); window.removeEventListener("storage", onFocus); };
+  }, []);
+  const products = catalog.filter((product) => product.active !== false);
+  const cart = normalizeCart(shopping.cart, products).map((item) => ({ ...item, quantity: Math.min(item.quantity, products.find((product) => product.id === item.productId)?.stock?.[item.size] ?? 0) })).filter((item) => item.quantity > 0);
   const [collection, setCollection] = useState<Collection>("featured");
   const [category, setCategory] = useState("Todos");
   const [query, setQuery] = useState("");
@@ -25,26 +49,30 @@ function useStoreState() {
   }
   function addToBag(productId: number, size: string, quantity = 1) {
     const product = products.find((item) => item.id === productId);
-    if (!product?.sizes.includes(size)) return;
+    const inBag = cart.find((item) => item.productId === productId && item.size === size)?.quantity ?? 0;
+    if (!catalogReady || catalogError || !product?.sizes.includes(size) || !Number.isSafeInteger(quantity) || quantity <= 0 || inBag + quantity > (product.stock?.[size] ?? 0)) { setNotice("Quantidade indisponível para este tamanho."); return false; }
     updateShopping((state) => ({ ...state, cart: addCartItem(state.cart, { productId, size, quantity }) }));
     setNotice(`${product.name}, tamanho ${size}, na sua sacola.`);
+    return true;
   }
   function toggleFavorite(id: number) {
     updateShopping((state) => ({ ...state, favorites: state.favorites.includes(id)
       ? state.favorites.filter((value) => value !== id) : [...state.favorites, id] }));
   }
   function updateQuantity(key: string, quantity: number) {
-    updateShopping((state) => ({ ...state, cart: setCartQuantity(state.cart, key, quantity) }));
+    const item = cart.find((entry) => cartKey(entry) === key);
+    const limit = products.find((product) => product.id === item?.productId)?.stock?.[item?.size ?? ""] ?? 0;
+    updateShopping((state) => ({ ...state, cart: setCartQuantity(state.cart, key, Math.min(quantity, limit)) }));
   }
   function clearBag() {
     updateShopping((state) => ({ ...state, cart: [] }));
   }
 
   return {
-    ...shopping, category, query, favoritesOnly, notice, collection,
+    ...shopping, cart, ready: shopping.ready && catalogReady, products, shipping, catalogError, category, query, favoritesOnly, notice, collection,
     setQuery, setFavoritesOnly, selectCategory, selectCollection, addToBag, toggleFavorite, updateQuantity, clearBag,
-    count: shopping.cart.reduce((sum, item) => sum + item.quantity, 0),
-    subtotal: cartSubtotal(shopping.cart, products),
+    count: cart.reduce((sum, item) => sum + item.quantity, 0),
+    subtotal: cartSubtotal(cart, products),
   };
 }
 

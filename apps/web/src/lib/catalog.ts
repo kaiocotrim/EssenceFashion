@@ -13,6 +13,9 @@ export type Product = {
   featured?: boolean;
   isNew?: boolean;
   compareAt?: number;
+  active?: boolean;
+  stock?: Record<string, number>;
+  sku?: string;
 };
 
 export const products: Product[] = [
@@ -87,7 +90,7 @@ export const products: Product[] = [
 export const categories = ["Todos", "Vestidos", "Blusas", "Chemises", "Camisas", "Alfaiataria", "Acessórios"];
 export type Collection = "featured" | "all" | "new" | "sale" | "casual" | "evening" | "pleats";
 export const collectionLabels: Record<Collection, string> = {
-  featured: "Em destaque", all: "Nossa coleção", new: "Novidades", sale: "Seleção especial",
+  featured: "Em Destaque", all: "Nossa coleção", new: "Novidades", sale: "Seleção especial",
   casual: "Casual", evening: "Ocasiões especiais", pleats: "Plissados",
 };
 export function matchesCollection(product: Product, collection: Collection) {
@@ -102,7 +105,7 @@ export function matchesCollection(product: Product, collection: Collection) {
   }
 }
 export const currency = (value: number) => value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-export const photo = (id: string, width = 700) => id.startsWith("/") ? id : `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`;
+export const photo = (id: string, width = 700) => id.startsWith("/") || id.startsWith("https://") ? id : `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=85`;
 
 export function installmentLabel(total: number, count = 3): string {
   const cents = Math.round(total * 100);

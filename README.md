@@ -4,7 +4,7 @@ Base com Next.js, React, TypeScript, Tailwind CSS e Turborepo, usando npm worksp
 
 ## Desenvolvimento
 
-Requer Node.js 22 ou superior.
+Requer Node.js 22.12 ou superior (ou Node.js 24).
 
 ```sh
 npm install
@@ -53,6 +53,44 @@ npm start
 ```
 
 ## Hospedagem na Vercel
+
+### Painel de gestão local
+
+Acesse `http://localhost:3000/admin` com `npm run dev` em execução. No primeiro
+acesso, crie uma senha de administração com pelo menos 10 caracteres. O cadastro
+inicial é permitido apenas no localhost, em desenvolvimento. A sessão dura 12 horas.
+
+O painel é exclusivo da Essen Fashion e permite:
+
+- Cadastrar e editar produtos, preços, tamanhos, descrições, fotos e publicação.
+- Enviar fotos JPG, PNG e WebP de até 4 MB ou informar uma URL HTTPS.
+- Ajustar o estoque por tamanho, com motivo e histórico de movimentações.
+- Cadastrar envios manualmente, atualizar a situação e guardar códigos de rastreio.
+- Configurar CEP de origem, embalagem e valores fixos demonstrativos de PAC/SEDEX.
+
+O catálogo público, os detalhes dos produtos, a sacola e o checkout consultam os
+dados gerenciados. O estoque inicial é zero: informe as quantidades reais antes
+de testar a inclusão de peças na sacola. O checkout continua demonstrativo:
+não cria pedidos, não processa pagamentos e não dá baixa no estoque.
+
+Produtos, configurações, envios, histórico, fotos e credenciais ficam em
+`apps/web/.data` (ignorado pelo Git). Faça backup dessa pasta. A senha é armazenada
+como hash; o acesso usa cookie HttpOnly. Para testes isolados, é possível definir
+`ESSEN_DATA_DIRECTORY` com um diretório separado.
+
+O modo local funciona em um único servidor com disco persistente. Para usar o
+Supabase no localhost e na Vercel, siga [a configuração do banco](supabase/README.md).
+O Prisma ORM gerencia os modelos PostgreSQL, as migrações e as transações.
+As tabelas mantêm RLS; o Supabase Storage guarda as fotos. Configure `DATABASE_URL`
+e `DIRECT_URL` no servidor e execute `npm run db:migrate --workspace=web`.
+O catálogo local pode ser carregado com `npm run db:seed --workspace=web` ou
+importado com `npm run db:import --workspace=web`. A chave do Supabase continua
+necessária para o Storage. Sem PostgreSQL, as gravações são bloqueadas na Vercel.
+Ainda não há integração de cotação, contratação de frete ou emissão de etiquetas.
+Os preços e prazos exibidos no checkout são simulações fixas configuráveis.
+
+Os testes de integração podem ser executados após o build com
+`npm run test:admin --workspace=web`; eles usam dados temporários separados.
 
 Importe o repositório na sua conta Vercel e selecione `apps/web` como Root Directory e Next.js como framework. Mantenha habilitado o acesso aos arquivos fora da Root Directory para o workspace e o lockfile da raiz.
 

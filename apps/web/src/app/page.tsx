@@ -7,11 +7,11 @@ import Icon from "@/components/ui/icon";
 import ProductCard from "@/components/store/product-card";
 import CampaignHero from "@/components/store/campaign-hero";
 import Newsletter from "@/components/store/newsletter";
-import { categories, collectionLabels, matchesCollection, products } from "@/lib/catalog";
+import { categories, collectionLabels, matchesCollection } from "@/lib/catalog";
 import { useStore } from "@/components/store/store-provider";
 
 export default function Home() {
-  const { category, collection, query, favorites, favoritesOnly, notice, selectCategory, selectCollection, toggleFavorite } = useStore();
+  const { products, catalogError, category, collection, query, favorites, favoritesOnly, notice, selectCategory, selectCollection, toggleFavorite } = useStore();
   const bestSellersRef = useRef<HTMLDivElement>(null);
   const visible = products.filter((product) =>
     matchesCollection(product, collection) &&
@@ -20,7 +20,7 @@ export default function Home() {
     product.name.toLocaleLowerCase("pt-BR").includes(query.toLocaleLowerCase("pt-BR"))
   );
   const title = favoritesOnly ? "Seus favoritos" : query ? "Resultados da busca" : category !== "Todos" ? category : collectionLabels[collection];
-  const bestSellers = [8, 9, 10, 11, 2, 5, 6, 7].map((id) => products.find((product) => product.id === id)!);
+  const bestSellers = [...products].sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured))).slice(0, 8);
   const inspiration = [
     { image: "style-1", title: "O SEU MOMENTO", collection: "evening" as const },
     { image: "style-2", title: "UM NOVO OLHAR", collection: "casual" as const },
@@ -34,13 +34,13 @@ export default function Home() {
   }
 
   return (
-    <main id="conteudo">
+    <main id="conteudo" className="bg-[#fbf7f1]">
+      {catalogError && <p role="alert" className="bg-red-50 px-6 py-4 text-center text-red-800">{catalogError}</p>}
       <CampaignHero />
-      <section id="colecao" aria-labelledby="collection-title" className="mx-auto max-w-[1800px] px-[3%] pt-16 pb-14 max-tablet:px-4 max-tablet:pt-10 max-tablet:pb-9">
-        <div className="relative text-center">
-          <p className="mb-3 text-[9px] tracking-[2.5px] text-muted">A SELEÇÃO ESSEN FASHION</p>
-          <h2 id="collection-title" className="font-serif text-[36px] leading-tight max-tablet:text-3xl">{title}</h2>
-          <button onClick={() => selectCollection("all")} className="absolute right-0 bottom-1 border-b border-black pb-1 text-[10px] tracking-wider max-tablet:static max-tablet:mt-4">VER TUDO</button>
+      <section id="colecao" aria-labelledby="collection-title" className="mx-auto max-w-[1800px] px-[2.5%] pt-20 pb-14 max-tablet:px-4 max-tablet:pt-10 max-tablet:pb-9">
+        <div className="relative">
+          <h2 id="collection-title" className="font-serif text-[46px] leading-tight max-tablet:text-[32px]">{title}</h2>
+          <button onClick={() => selectCollection("all")} className="absolute right-0 bottom-1 border-b border-black pb-1 text-[10px] tracking-wider max-tablet:bottom-1">VER TUDO</button>
         </div>
         <div className="mt-7 mb-7 flex items-center justify-between gap-4 border-b border-line pb-4">
           <div className="flex gap-6 overflow-x-auto text-[9px] tracking-widest max-tablet:gap-5" aria-label="Filtrar por categoria">{categories.map((item) => <button key={item} onClick={() => selectCategory(item)} aria-pressed={category === item} className="shrink-0 py-2 text-muted underline-offset-8 hover:text-black aria-pressed:text-black aria-pressed:underline">{item.toUpperCase()}</button>)}</div>

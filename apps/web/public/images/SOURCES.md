@@ -2,6 +2,9 @@
 
 Imagens públicas da referência indicada pelo usuário, usadas nesta vitrine demonstrativa.
 
+- campaign/model-rio.webp: recuperada da publicação existente em https://essence-fashion-mu.vercel.app/images/campaign/model-rio.webp para restaurar a versão escolhida pelo usuário. A fonte original da imagem não consta neste checkout.
+- ../fonts/allura-regular.ttf: recuperada de https://essence-fashion-mu.vercel.app/fonts/allura-regular.ttf, usada no título da campanha Rio.
+
 - campaign/casual-desktop.webp: https://www.amissima.com.br/bannerhome/banner_nova02_desktop.webp
 - campaign/pleats.webp: https://www.amissima.com.br/bannerhome/banner-esquerdo_plissado_1308.webp
 - campaign/evening.webp: https://www.amissima.com.br/bannerhome/banner-direito_festa_1308.webp

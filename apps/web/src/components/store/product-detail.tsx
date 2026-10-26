@@ -7,20 +7,27 @@ import { useRouter } from "next/navigation";
 import Icon from "@/components/ui/icon";
 import QuantityControl from "./quantity-control";
 import { useStore } from "./store-provider";
-import { colorSwatch, currency, installmentLabel, photo, products, type Product } from "@/lib/catalog";
+import { colorSwatch, currency, installmentLabel, photo, type Product } from "@/lib/catalog";
 import ProductCard from "./product-card";
 
-export default function ProductDetail({ product }: { product: Product }) {
+export default function ProductDetail({ product: initial }: { product: Product }) {
+  const { products, ready } = useStore();
+  const product = products.find((item) => item.id === initial.id);
+  if (ready && !product) return <main className="p-16 text-center"><h1 className="text-3xl">Peça indisponível</h1><Link href="/#colecao">Ver coleção</Link></main>;
+  return <ProductDetailContent product={product ?? initial} />;
+}
+
+function ProductDetailContent({ product }: { product: Product }) {
   const [size, setSize] = useState(product.sizes.length === 1 ? product.sizes[0] : "");
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState("");
   const [added, setAdded] = useState(false);
-  const { addToBag, favorites, toggleFavorite } = useStore();
+  const { products, addToBag, favorites, toggleFavorite } = useStore();
   const router = useRouter();
 
   function add(buyNow = false) {
     if (!size) { setError("Escolha um tamanho para continuar."); return; }
-    addToBag(product.id, size, quantity);
+    if (!addToBag(product.id, size, quantity)) { setError("Quantidade indisponível para este tamanho."); return; }
     setAdded(true);
     setError("");
     if (buyNow) router.push("/sacola");
@@ -46,7 +53,7 @@ export default function ProductDetail({ product }: { product: Product }) {
           <fieldset className="mt-6" aria-describedby={error ? "size-error" : undefined}>
             <legend className="mb-3 text-xs">Selecione o tamanho</legend>
             <div className="flex flex-wrap gap-2">
-              {product.sizes.map((value) => <label key={value} className="cursor-pointer"><input type="radio" name="size" value={value} checked={size === value} onChange={() => { setSize(value); setError(""); setAdded(false); }} className="peer sr-only" /><span className="inline-flex min-h-11 min-w-11 items-center justify-center border border-line px-3 text-xs peer-checked:border-olive peer-checked:bg-olive peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-olive">{value}</span></label>)}
+              {product.sizes.map((value) => <label key={value} className="cursor-pointer"><input type="radio" disabled={!(product.stock?.[value] ?? 0)} name="size" value={value} checked={size === value} onChange={() => { setSize(value); setError(""); setAdded(false); }} className="peer sr-only" /><span className="inline-flex min-h-11 min-w-11 items-center justify-center border border-line px-3 text-xs peer-checked:border-olive peer-checked:bg-olive peer-checked:text-white peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-olive peer-disabled:opacity-30 peer-disabled:line-through">{value}</span></label>)}
             </div>
           </fieldset>
           {error && <p id="size-error" role="alert" className="mt-3 text-xs text-red-700">{error}</p>}

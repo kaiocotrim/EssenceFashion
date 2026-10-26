@@ -9,12 +9,14 @@ import AddressForm from "@/components/checkout/address-form";
 import PaymentForm from "@/components/checkout/payment-form";
 import { currency } from "@/lib/catalog";
 import { orderTotal } from "@/lib/cart";
-import { addressError, deliveryOptions, emptyAddress, paymentMethods, type PaymentMethod } from "@/lib/checkout";
+import { addressError, emptyAddress, paymentMethods, type PaymentMethod } from "@/lib/checkout";
+import { managedDeliveryOptions } from "@/lib/management";
 
 type Receipt = { total: number; count: number; method: string };
 
 export default function CheckoutPage() {
-  const { cart, ready, subtotal, count, clearBag } = useStore();
+  const { shipping, catalogError, cart, ready, subtotal, count, clearBag } = useStore();
+  const deliveryOptions = managedDeliveryOptions(shipping);
   const [step, setStep] = useState<2 | 3>(2);
   const [address, setAddress] = useState({ ...emptyAddress });
   const [deliveryId, setDeliveryId] = useState("standard");
@@ -52,6 +54,7 @@ export default function CheckoutPage() {
 
   return (
     <main id="conteudo" className="mx-auto w-full max-w-[1400px] px-[6%] py-8 tablet:py-12">
+      {catalogError && <p role="alert" className="mb-5 bg-red-50 p-4 text-red-800">{catalogError}</p>}
       {receipt ? (
         <section className="mx-auto my-10 max-w-xl border border-line bg-[#f5f4ee] px-6 py-14 text-center tablet:p-14">
           <span aria-hidden="true" className="mx-auto flex size-14 items-center justify-center rounded-full bg-olive text-2xl text-white">✓</span>

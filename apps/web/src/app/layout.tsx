@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { StoreProvider } from "@/components/store/store-provider";
-import StoreHeader from "@/components/store/store-header";
-import StoreFooter from "@/components/store/store-footer";
+import StoreChrome from "@/components/store/store-chrome";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,9 +14,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="pt-BR" className="h-full antialiased">
       <body className="flex min-h-full flex-col">
         <StoreProvider>
-          <StoreHeader />
+          <Suspense fallback={<div className="h-[88px] max-tablet:h-[72px]" aria-hidden="true" />}><StoreChrome placement="header" /></Suspense>
           {children}
-          <StoreFooter />
+          <Suspense fallback={null}><StoreChrome placement="footer" /></Suspense>
         </StoreProvider>
       </body>
     </html>
