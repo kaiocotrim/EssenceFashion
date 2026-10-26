@@ -12,23 +12,41 @@ function useStoreState() {
   const [shipping, setShipping] = useState(defaultShipping);
   const [catalogReady, setCatalogReady] = useState(false);
   const [catalogError, setCatalogError] = useState("");
+  const [catalogLoading, setCatalogLoading] = useState(true);
+  const [catalogVersion, setCatalogVersion] = useState(0);
   useEffect(() => {
     let alive = true;
+    let pending = false;
+    let retryTimer: ReturnType<typeof setTimeout> | undefined;
+    let failures = 0;
+    const controller = new AbortController();
     async function refresh() {
+      if (pending || !alive) return;
+      pending = true;
+      clearTimeout(retryTimer);
+      setCatalogLoading(true);
       try {
-        const response = await fetch("/api/catalog", { cache: "no-store" });
+        const response = await fetch("/api/catalog", { cache: "no-store", signal: controller.signal });
         if (!response.ok) throw new Error();
         const data = await response.json();
-        if (alive) { setCatalog(data.products); setShipping(data.shipping); setCatalogReady(true); setCatalogError(""); }
-      } catch { if (alive) setCatalogError("Não foi possível atualizar o catálogo. Recarregue a página antes de comprar."); }
+        if (alive) { setCatalog(data.products); setShipping(data.shipping); setCatalogReady(true); setCatalogError(""); failures = 0; }
+      } catch {
+        if (alive) {
+          setCatalogError("Não foi possível atualizar o catálogo. Tente novamente antes de comprar.");
+          if (++failures <= 2) retryTimer = setTimeout(() => { void refresh(); }, failures * 1500);
+        }
+      } finally {
+        pending = false;
+        if (alive) setCatalogLoading(false);
+      }
     }
     void refresh();
     const onFocus = () => { void refresh(); };
     window.addEventListener("focus", onFocus);
     window.addEventListener("essen-catalog-update", onFocus);
     window.addEventListener("storage", onFocus);
-    return () => { alive = false; window.removeEventListener("focus", onFocus); window.removeEventListener("essen-catalog-update", onFocus); window.removeEventListener("storage", onFocus); };
-  }, []);
+    return () => { alive = false; controller.abort(); clearTimeout(retryTimer); window.removeEventListener("focus", onFocus); window.removeEventListener("essen-catalog-update", onFocus); window.removeEventListener("storage", onFocus); };
+  }, [catalogVersion]);
   const products = catalog.filter((product) => product.active !== false);
   const cart = normalizeCart(shopping.cart, products).map((item) => ({ ...item, quantity: Math.min(item.quantity, products.find((product) => product.id === item.productId)?.stock?.[item.size] ?? 0) })).filter((item) => item.quantity > 0);
   const [collection, setCollection] = useState<Collection>("featured");
@@ -69,7 +87,7 @@ function useStoreState() {
   }
 
   return {
-    ...shopping, cart, ready: shopping.ready && catalogReady, products, shipping, catalogError, category, query, favoritesOnly, notice, collection,
+    ...shopping, cart, ready: shopping.ready && catalogReady, products, shipping, catalogError, catalogLoading, refreshCatalog: () => setCatalogVersion((version) => version + 1), category, query, favoritesOnly, notice, collection,
     setQuery, setFavoritesOnly, selectCategory, selectCollection, addToBag, toggleFavorite, updateQuantity, clearBag,
     count: cart.reduce((sum, item) => sum + item.quantity, 0),
     subtotal: cartSubtotal(cart, products),

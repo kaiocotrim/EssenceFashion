@@ -11,7 +11,7 @@ import { categories, collectionLabels, matchesCollection } from "@/lib/catalog";
 import { useStore } from "@/components/store/store-provider";
 
 export default function Home() {
-  const { products, catalogError, category, collection, query, favorites, favoritesOnly, notice, selectCategory, selectCollection, toggleFavorite } = useStore();
+  const { products, catalogError, catalogLoading, refreshCatalog, category, collection, query, favorites, favoritesOnly, notice, selectCategory, selectCollection, toggleFavorite } = useStore();
   const bestSellersRef = useRef<HTMLDivElement>(null);
   const visible = products.filter((product) =>
     matchesCollection(product, collection) &&
@@ -35,9 +35,9 @@ export default function Home() {
 
   return (
     <main id="conteudo" className="bg-[#fbf7f1]">
-      {catalogError && <p role="alert" className="bg-red-50 px-6 py-4 text-center text-red-800">{catalogError}</p>}
       <CampaignHero />
       <section id="colecao" aria-labelledby="collection-title" className="mx-auto max-w-[1800px] px-[2.5%] pt-20 pb-14 max-tablet:px-4 max-tablet:pt-10 max-tablet:pb-9">
+        {catalogError && <div role="alert" className="mb-7 flex flex-wrap items-center justify-between gap-3 border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-800"><p>{catalogError}</p><button type="button" onClick={refreshCatalog} disabled={catalogLoading} className="shrink-0 underline underline-offset-4 disabled:cursor-wait disabled:opacity-60">{catalogLoading ? "Atualizando…" : "Tentar novamente"}</button></div>}
         <div className="relative">
           <h2 id="collection-title" className="font-serif text-[46px] leading-tight max-tablet:text-[32px]">{title}</h2>
           <button onClick={() => selectCollection("all")} className="absolute right-0 bottom-1 border-b border-black pb-1 text-[10px] tracking-wider max-tablet:bottom-1">VER TUDO</button>
